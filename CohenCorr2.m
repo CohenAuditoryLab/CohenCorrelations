@@ -43,5 +43,32 @@ function result = CohenCorr2(spikes_data, tasks_data, sample_rate)
         xmin = min(double(spikes_in_trial(:,2)))/sample_rate;
         xmax = max(double(spikes_in_trial(:,2)))/sample_rate;
         xlim([(xmin - 2.5e-3*xmin) (xmax+2.5e-3*xmax)]);
+    % convert spikes to spike trains
+        spike_trains = zeros([numel(unique_neurons),numel([start_time:end_time])]);
+        spikes = spikes_in_trial;
+        spikes(:,2) = spikes_in_trial(:,2) - start_time;
+        for i=1:numel(unique_neurons)
+            spike_trains(i,[spikes(spikes(:,1) == unique_neurons(i),2)]) = 1;
+        end
+            
     % generate adjacency matrix for neurons
+        N = numel(unique_neurons);
+        C = zeros(N);
+        upd = textprogressbar(N);
+        for i=1:N
+            upd(i);
+            for j=1:N
+                if(i~=j)
+                    r = xcorr(spike_trains(i,:),spike_trains(j,:),500,'coeff');
+                    if (r < 0)
+                        r = 0;
+                    end
+                    C(i,j) = max(r);
+                end
+            end
+        end
+        heatmap(C);
+        ylabel('Clusters'); xlabel('Pearson R value');    
+        title('Pair-Wise Max-Cross Correlations; Jan 14 Block 3 Trial 12');
+    % run BCT on adjacency matrix
 end
