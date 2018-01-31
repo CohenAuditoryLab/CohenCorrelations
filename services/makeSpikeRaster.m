@@ -22,8 +22,9 @@ function makeSpikeRaster = makeSpikeRaster(spikesInTrial, uniqueNeurons, sampleR
         xmax = max(double(spikesInTrial(:,2)))/sampleRate;
         xlim([(xmin - 2.5e-3*xmin) (xmax+2.5e-3*xmax)]);
         hold off;
-        saveas(h, [output_directory sslash 'spikeRaster.fig']);
-        saveas(h, [output_directory sslash 'spikeRaster.png']);
+        %saveas(h, [output_directory sslash 'spikeRaster.fig']);
+        %saveas(h, [output_directory sslash 'spikeRaster.png']); % this
+        %takes too long for some reason
         upd(numel(uniqueNeurons) + 1);
         clf; close(h);
         makeSpikeRaster = h;

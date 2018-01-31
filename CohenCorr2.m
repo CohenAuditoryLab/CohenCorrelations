@@ -29,7 +29,7 @@ function output = CohenCorr2(spikesData, taskData, startTime, endTime, sampleRat
     % generate adjacency matrix for neurons
         [output.adjacencyMatrix, output.matrixFigure] = makeAdjacencyMatrix(output.spikesByBin, output.uniqueNeurons, output_directory, sslash);
     % run BCT on adjacency matrix
-    save([output_directory slash 'correlational_output.mat'], 'output');
+    save([output_directory sslash 'correlational_output.mat'], 'output');
     %wrap up
     set(0,'DefaultFigureVisible','on');
 end
