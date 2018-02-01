@@ -1,5 +1,6 @@
 function [adjacencyMatrix, matrixFigure] = makeAdjacencyMatrix(spikesByBin, uniqueNeurons, output_directory, sslash)
-% makeAdjacencyMatrix generates a raster for the specified spikes per time
+% makeAdjacencyMatrix generates an adjacency matrix given the spikes by bin
+        disp('Generating & saving adjacency matrix.');
         N = numel(uniqueNeurons);
         C = zeros(N);
         upd = textprogressbar(N);
