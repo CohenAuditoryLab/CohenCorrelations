@@ -3,12 +3,17 @@ function output = CohenCorr2(spikesData, taskData, startTime, endTime, sampleRat
 %   INPUTS:
     %   spikesData: path to spikes
     %   taskData: path to task data
-    %   startTime: the start of the 
+    %   startTime: the start of the desired time range
+    %   endTime: the end of the desired time range
+    %   sampleRate: rate of sampling during electrophysiology recording
 %   OUTPUTS:
-    %   output.spikesInTrial
-    %   output.uniqueNeurons
-    %   output.spikeRaster
-    %   output.spikesByBin
+    %   output.spikesInTrial: spike sample #s within designated time range
+    %   output.uniqueNeurons: 1-d array of unique neuron IDs
+    %   output.spikeRaster: MATLAB figure object of spike raster plot 
+    %   output.spikesByBin: spike trains by neuron across ms bins
+    %   output.adjacencyMatrix: adjacency matrix based on maxCrossCorr
+    %   output.matrixFigure: MATLAB figure object of adjacency matrix 
+    %   output.graphMetrics: struct of BCT graph metrics for dataset
     
     % load libraries
         addpath(genpath('libraries'));
@@ -31,7 +36,8 @@ function output = CohenCorr2(spikesData, taskData, startTime, endTime, sampleRat
     % run BCT on adjacency matrix
         output.graphMetrics = graphMetrics(output.adjacencyMatrix);
     % save output
-        save([output_directory sslash 'correlational_output.mat'], 'output');
-    %wrap up
-    set(0,'DefaultFigureVisible','on');
+        saveCorrOutput(output, output_directory, sslash);
+        disp('Correlational analysis complete.');
+    % turn on figure generation
+        set(0,'DefaultFigureVisible','on');
 end
