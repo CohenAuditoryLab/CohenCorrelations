@@ -32,9 +32,9 @@ function output = CohenCorr2(spikesData, taskData, startTime, endTime, sampleRat
     % bin spike trians
         output.spikesByBin = generateBinnedSpikeTrains(output.spikesInTrial, output.uniqueNeurons, startTime, endTime, sampleRate);
     % generate adjacency matrix for neurons
-        [output.adjacencyMatrix, output.matrixFigure] = makeAdjacencyMatrix(output.spikesByBin, output.uniqueNeurons, output_directory, sslash);
+        [output.adjacencyMatrices, output.matrixFigure] = makeAdjacencyMatrix(output.spikesByBin, output.uniqueNeurons, output_directory, sslash);
     % run BCT on adjacency matrix
-        output.graphMetrics = graphMetrics(output.adjacencyMatrix);
+        output.graphMetrics = graphMetrics(output.adjacencyMatrices);
     % save output
         saveCorrOutput(output, output_directory, sslash);
         disp('Correlational analysis complete.');

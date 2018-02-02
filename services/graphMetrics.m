@@ -1,7 +1,8 @@
-function graphMetrics = graphMetrics(adjacencyMatrix)
+function graphMetrics = graphMetrics(adjacencyMatrices)
 % out generates connectivity metrics from BCT based on an
 %   adjacency matrix
     disp('Running graph metrics from Brain Connectivity Toolbox.');
+    adjacencyMatrix = adjacencyMatrices.thresholded;
     % density
         [out.density,out.vertices,out.edges] = density_und(adjacencyMatrix);
     % degree & strength
