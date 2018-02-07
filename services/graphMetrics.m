@@ -32,6 +32,15 @@ function graphMetrics = graphMetrics(adjacencyMatrices)
         out.community_Q_avg = mean([out.community(j).Q]);
         out.comm_num_avg = mean([out.community(j).comm_number]);
         out.comm_consensus_partition = consensus_und(agreement(horzcat(out.community.Ci))/100,.5,10);
+        % get modules
+        partition = out.comm_consensus_partition;
+        moduleNumbers = unique(partition);
+        modules = [];
+        for i=1:numel(moduleNumbers)
+            module = find(partition == moduleNumbers(i));
+            modules = [modules; {reshape(module, [1, numel(module)])}];
+        end
+        out.modules = modules;
         out.part_coeff_avg = mean(vertcat(out.community.part_coeff_avg));
         out.win_mod_degree_z_avg = mean(vertcat(out.community.win_mod_degree_z));
         graphMetrics = out;

@@ -35,6 +35,8 @@ function output = CohenCorr2(spikesData, taskData, startTime, endTime, sampleRat
         [output.adjacencyMatrices, output.matrixFigure] = makeAdjacencyMatrix(output.spikesByBin, output.uniqueNeurons, output_directory, sslash);
     % run BCT on adjacency matrix
         output.graphMetrics = graphMetrics(output.adjacencyMatrices);
+    % reorder adjacency matrix by consensus partition
+        [output.reorderedAdjacencyMatrices, output.reorderdMatrixFigure] = reorderAdjacencyMatrix(output, output_directory, sslash);
     % save output
         saveCorrOutput(output, output_directory, sslash);
         disp('Correlational analysis complete.');
