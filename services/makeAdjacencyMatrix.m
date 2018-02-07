@@ -1,4 +1,4 @@
-function [adjacencyMatrices, matrixFigure] = makeAdjacencyMatrix(spikesByBin, uniqueNeurons, output_directory, sslash)
+function [adjacencyMatrices, matrixFigure] = makeAdjacencyMatrix(spikesByBin, uniqueNeurons, output_directory, sslash, trial)
 % makeAdjacencyMatrix generates an adjacency matrix given the spikes by bin
         disp('Generating & saving adjacency matrix.');
         N = numel(uniqueNeurons);
@@ -32,7 +32,7 @@ function [adjacencyMatrices, matrixFigure] = makeAdjacencyMatrix(spikesByBin, un
         end
         h = heatmap(C_sig);
         ylabel('Clusters'); xlabel('Pearson R value');    
-        title('Pair-Wise Max-Cross Correlations; Jan 14 Block 3 Trial 12');
+        title(['Pair-Wise Max-Cross Correlations; Trial #' trial]);
         saveas(h, [output_directory sslash 'adjacencyMatrix.fig']);
         saveas(h, [output_directory sslash 'adjacencyMatrix.jpg']);
         clf;

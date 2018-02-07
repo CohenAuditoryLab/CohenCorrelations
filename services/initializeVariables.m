@@ -14,9 +14,12 @@ end
 % load taskData
 if exist('taskData', 'var') == 0
     taskData = load([projectFolder sslash 'sampleData' sslash 'tasks' sslash 'jan14_18.mat']);
+    taskData = taskData.meta;
 else 
     taskData = load(taskData);
 end
+% get sounds
+sounds = taskData.sound;
 % set sampleRate
 if exist('sampleRate', 'var') == 0
     sampleRate = 24410;
@@ -30,5 +33,5 @@ if exist('endTime', 'var') == 0
     endTime = 4099117;
 end
 % output directory
-output_directory = [projectFolder sslash 'output' sslash datestr(now,'yyyy_mm_dd__HH_MM_SS')];
-mkdir(output_directory);
+base_output_directory = [projectFolder sslash 'output' sslash datestr(now,'yyyy_mm_dd__HH_MM_SS')];
+mkdir(base_output_directory);

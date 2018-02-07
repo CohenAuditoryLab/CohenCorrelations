@@ -23,22 +23,28 @@ function output = CohenCorr2(spikesData, taskData, startTime, endTime, sampleRat
         initializeVariables;
     % turn off figure generation
         set(0,'DefaultFigureVisible','off');
-    % extract specified times
-        output.spikesInTrial = spikesData(find(spikesData(:,2)>startTime & spikesData(:,2)< endTime),:);
-    % get unique neurons, sort them
-        output.uniqueNeurons = unique(output.spikesInTrial(:,1));
-    % make a raster plot
-        output.spikeRaster = makeSpikeRaster(output.spikesInTrial, output.uniqueNeurons, sampleRate, output_directory, sslash);   
-    % bin spike trians
-        output.spikesByBin = generateBinnedSpikeTrains(output.spikesInTrial, output.uniqueNeurons, startTime, endTime, sampleRate);
-    % generate adjacency matrix for neurons
-        [output.adjacencyMatrices, output.matrixFigure] = makeAdjacencyMatrix(output.spikesByBin, output.uniqueNeurons, output_directory, sslash);
-    % run BCT on adjacency matrix
-        output.graphMetrics = graphMetrics(output.adjacencyMatrices);
-    % reorder adjacency matrix by consensus partition
-        [output.reorderedAdjacencyMatrices, output.reorderdMatrixFigure] = reorderAdjacencyMatrix(output, output_directory, sslash);
-    % save output
-        saveCorrOutput(output, output_directory, sslash);
+        for trial=1:size(sounds,1)
+            disp(['Analyzing Trial #' num2str(trial)]);
+            output_directory = [base_output_directory sslash 'trial_' num2str(trial)];
+            mkdir(output_directory);
+            startTime = sounds(trial,1); endTime = sounds(trial,2);
+        % extract specified times
+            output.spikesInTrial = spikesData(find(spikesData(:,2)>startTime & spikesData(:,2)< endTime),:);
+        % get unique neurons, sort them
+            output.uniqueNeurons = unique(output.spikesInTrial(:,1));
+        % make a raster plot
+            output.spikeRaster = makeSpikeRaster(output.spikesInTrial, output.uniqueNeurons, sampleRate, output_directory, sslash);   
+        % bin spike trians
+            output.spikesByBin = generateBinnedSpikeTrains(output.spikesInTrial, output.uniqueNeurons, startTime, endTime, sampleRate);
+        % generate adjacency matrix for neurons
+            [output.adjacencyMatrices, output.matrixFigure] = makeAdjacencyMatrix(output.spikesByBin, output.uniqueNeurons, output_directory, sslash, trial);
+        % run BCT on adjacency matrix
+            output.graphMetrics = graphMetrics(output.adjacencyMatrices);
+        % reorder adjacency matrix by consensus partition
+            [output.reorderedAdjacencyMatrices, output.reorderdMatrixFigure] = reorderAdjacencyMatrix(output, output_directory, sslash, trial);
+        % save output
+            saveCorrOutput(output, output_directory, sslash);
+        end
         disp('Correlational analysis complete.');
     % turn on figure generation
         set(0,'DefaultFigureVisible','on');

@@ -32,7 +32,7 @@ function [adjacencyMatrices, matrixFigure] = reorderAdjacencyMatrix(output, outp
         end
         h = heatmap(newC_sig);
         ylabel('Clusters'); xlabel('Pearson R value');    
-        title('Pair-Wise Max-Cross Correlations; Jan 14 Block 3 Trial 12');
+        title(['Pair-Wise Max-Cross Correlations; Trial #' trial]);
         saveas(h, [output_directory sslash 'reorderedAdjacencyMatrix.fig']);
         saveas(h, [output_directory sslash 'reorderedAdjacencyMatrix.jpg']);
         clf;
