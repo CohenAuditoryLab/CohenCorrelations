@@ -23,28 +23,32 @@ function output = CohenCorr2(spikesData, taskData, startTime, endTime, sampleRat
         initializeVariables;
     % turn off figure generation
         set(0,'DefaultFigureVisible','off');
-        for trial=1:size(sounds,1)
+        outputCollector = [];
+        for trial=1:2
             disp(['Analyzing Trial #' num2str(trial)]);
-            output_directory = [base_output_directory sslash 'trial_' num2str(trial)];
-            mkdir(output_directory);
+            outputDirectory = [baseOutputDirectory sslash 'trials' sslash 'trial_' num2str(trial)];
+            mkdir(outputDirectory);
             startTime = sounds(trial,1); endTime = sounds(trial,2);
+            output = [];
         % extract specified times
             output.spikesInTrial = spikesData(find(spikesData(:,2)>startTime & spikesData(:,2)< endTime),:);
         % get unique neurons, sort them
             output.uniqueNeurons = unique(output.spikesInTrial(:,1));
         % make a raster plot
-            output.spikeRaster = makeSpikeRaster(output.spikesInTrial, output.uniqueNeurons, sampleRate, output_directory, sslash);   
+            output.spikeRaster = makeSpikeRaster(output.spikesInTrial, output.uniqueNeurons, sampleRate, outputDirectory, sslash);   
         % bin spike trians
             output.spikesByBin = generateBinnedSpikeTrains(output.spikesInTrial, output.uniqueNeurons, startTime, endTime, sampleRate);
         % generate adjacency matrix for neurons
-            [output.adjacencyMatrices, output.matrixFigure] = makeAdjacencyMatrix(output.spikesByBin, output.uniqueNeurons, output_directory, sslash, trial);
+            [output.adjacencyMatrices, output.matrixFigure] = makeAdjacencyMatrix(output.spikesByBin, output.uniqueNeurons, outputDirectory, sslash, trial);
         % run BCT on adjacency matrix
             output.graphMetrics = graphMetrics(output.adjacencyMatrices);
         % reorder adjacency matrix by consensus partition
-            [output.reorderedAdjacencyMatrices, output.reorderdMatrixFigure] = reorderAdjacencyMatrix(output, output_directory, sslash, trial);
+            [output.reorderedAdjacencyMatrices, output.reorderdMatrixFigure] = reorderAdjacencyMatrix(output, outputDirectory, sslash, trial);
         % save output
-            saveCorrOutput(output, output_directory, sslash);
+            saveCorrOutput(output, outputDirectory, sslash);
+            outputCollector = [outputCollector; output];
         end
+        save([baseOutputDirectory sslash 'collectedCorrelationalOutput.mat'], 'outputCollector');
         disp('Correlational analysis complete.');
     % turn on figure generation
         set(0,'DefaultFigureVisible','on');

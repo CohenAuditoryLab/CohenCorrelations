@@ -1,4 +1,4 @@
-function [adjacencyMatrices, matrixFigure] = reorderAdjacencyMatrix(output, output_directory, sslash)
+function [adjacencyMatrices, matrixFigure] = reorderAdjacencyMatrix(output, output_directory, sslash, trial)
 % makeAdjacencyMatrix generates an adjacency matrix given the spikes by bin
         disp('Reordering adjacency matrix according to modules.');
         N = numel(output.uniqueNeurons);

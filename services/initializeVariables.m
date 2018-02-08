@@ -33,5 +33,5 @@ if exist('endTime', 'var') == 0
     endTime = 4099117;
 end
 % output directory
-base_output_directory = [projectFolder sslash 'output' sslash datestr(now,'yyyy_mm_dd__HH_MM_SS')];
-mkdir(base_output_directory);
+baseOutputDirectory = [projectFolder sslash 'output' sslash datestr(now,'yyyy_mm_dd__HH_MM_SS')];
+mkdir(baseOutputDirectory);
