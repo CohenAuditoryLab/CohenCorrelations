@@ -24,7 +24,7 @@ function output = CohenCorr2(spikesData, taskData, startTime, endTime, sampleRat
     % turn off figure generation
         set(0,'DefaultFigureVisible','off');
         outputCollector = [];
-        for trial=1:2
+        for trial=1:size(sounds,1)
             disp(['Analyzing Trial #' num2str(trial)]);
             outputDirectory = [baseOutputDirectory sslash 'trials' sslash 'trial_' num2str(trial)];
             mkdir(outputDirectory);
