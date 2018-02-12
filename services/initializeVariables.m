@@ -39,3 +39,6 @@ mkdir(baseOutputDirectory);
 uniqueNeurons = unique(spikesData(:,1));
 %get avg sound time
 avgSoundTime = mean((sounds(:,2) - sounds(:,1)));
+% output
+output = [];
+output.uniqueNeurons = uniqueNeurons;

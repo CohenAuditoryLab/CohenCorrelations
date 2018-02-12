@@ -24,15 +24,14 @@ function output = CohenCorr2(spikesData, taskData, startTime, endTime, sampleRat
     % turn off figure generation
         set(0,'DefaultFigureVisible','off');
         outputCollector = [];
-        for trial=1:size(sounds,1)
-            disp(['Analyzing Trial #' num2str(trial)]);
+        for trial=1:1%size(sounds,1)
+        % set up directories 
             trialDirectory = [baseOutputDirectory sslash 'trials' sslash 'trial_' num2str(trial)];
             trialOutputDirectory = [trialDirectory sslash 'trialOutput'];
             preTrialOutputDirectory = [trialDirectory sslash 'preTrialOutput'];
             mkdir(trialOutputDirectory); mkdir(preTrialOutputDirectory);
-            output = [];
-            output.uniqueNeurons = uniqueNeurons;
         % do trial analysis
+            disp(['Analyzing Trial #' num2str(trial)]);
             startTime = sounds(trial,1); endTime = sounds(trial,2);
             output.spikesInTrial = spikesData(spikesData(:,2)>startTime & spikesData(:,2)< endTime,:);
             output.trial = analyzeSpikes(output.spikesInTrial, uniqueNeurons, sampleRate, startTime, endTime, trialOutputDirectory, trial, sslash);
@@ -45,6 +44,8 @@ function output = CohenCorr2(spikesData, taskData, startTime, endTime, sampleRat
             outputCollector = [outputCollector; output];
         end
         save([baseOutputDirectory sslash 'collectedCorrelationalOutput.mat'], 'outputCollector');
+        % compare trials & pre-trial analysis
+        compareTrialPreTrial(outputCollector, baseOutputDirectory, sslash);
         disp('Correlational analysis complete.');
     % turn on figure generation
         set(0,'DefaultFigureVisible','on');
