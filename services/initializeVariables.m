@@ -35,3 +35,7 @@ end
 % output directory
 baseOutputDirectory = [projectFolder sslash 'output' sslash datestr(now,'yyyy_mm_dd__HH_MM_SS')];
 mkdir(baseOutputDirectory);
+% unique neurons
+uniqueNeurons = unique(spikesData(:,1));
+%get avg sound time
+avgSoundTime = mean((sounds(:,2) - sounds(:,1)));

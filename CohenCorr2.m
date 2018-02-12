@@ -26,26 +26,22 @@ function output = CohenCorr2(spikesData, taskData, startTime, endTime, sampleRat
         outputCollector = [];
         for trial=1:size(sounds,1)
             disp(['Analyzing Trial #' num2str(trial)]);
-            outputDirectory = [baseOutputDirectory sslash 'trials' sslash 'trial_' num2str(trial)];
-            mkdir(outputDirectory);
-            startTime = sounds(trial,1); endTime = sounds(trial,2);
+            trialDirectory = [baseOutputDirectory sslash 'trials' sslash 'trial_' num2str(trial)];
+            trialOutputDirectory = [trialDirectory sslash 'trialOutput'];
+            preTrialOutputDirectory = [trialDirectory sslash 'preTrialOutput'];
+            mkdir(trialOutputDirectory); mkdir(preTrialOutputDirectory);
             output = [];
-        % extract specified times
-            output.spikesInTrial = spikesData(find(spikesData(:,2)>startTime & spikesData(:,2)< endTime),:);
-        % get unique neurons, sort them
-            output.uniqueNeurons = unique(output.spikesInTrial(:,1));
-        % make a raster plot
-            output.spikeRaster = makeSpikeRaster(output.spikesInTrial, output.uniqueNeurons, sampleRate, outputDirectory, sslash);   
-        % bin spike trians
-            output.spikesByBin = generateBinnedSpikeTrains(output.spikesInTrial, output.uniqueNeurons, startTime, endTime, sampleRate);
-        % generate adjacency matrix for neurons
-            [output.adjacencyMatrices, output.matrixFigure] = makeAdjacencyMatrix(output.spikesByBin, output.uniqueNeurons, outputDirectory, sslash, trial);
-        % run BCT on adjacency matrix
-            output.graphMetrics = graphMetrics(output.adjacencyMatrices);
-        % reorder adjacency matrix by consensus partition
-            [output.reorderedAdjacencyMatrices, output.reorderdMatrixFigure] = reorderAdjacencyMatrix(output, outputDirectory, sslash, trial);
+            output.uniqueNeurons = uniqueNeurons;
+        % do trial analysis
+            startTime = sounds(trial,1); endTime = sounds(trial,2);
+            output.spikesInTrial = spikesData(spikesData(:,2)>startTime & spikesData(:,2)< endTime,:);
+            output.trial = analyzeSpikes(output.spikesInTrial, uniqueNeurons, sampleRate, startTime, endTime, trialOutputDirectory, trial, sslash);
+        % do pretrial analysis
+            disp(['Analyzing Spikes before Trial #' num2str(trial)]);
+            output.spikesPreTrial = spikesData(spikesData(:,2)<startTime & spikesData(:,2)> (startTime-avgSoundTime),:);
+            output.preTrial = analyzeSpikes(output.spikesPreTrial, uniqueNeurons, sampleRate, (startTime-avgSoundTime), startTime, preTrialOutputDirectory, trial, sslash);
         % save output
-            saveCorrOutput(output, outputDirectory, sslash);
+            saveCorrOutput(output, trialDirectory, sslash);
             outputCollector = [outputCollector; output];
         end
         save([baseOutputDirectory sslash 'collectedCorrelationalOutput.mat'], 'outputCollector');
